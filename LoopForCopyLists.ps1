@@ -17,18 +17,18 @@ $DestinationLists = Get-PnPList
 ForEach($SourceList in $SourceLists)
 {
     #Check if the library already exists in target
-    If(!($DestinationLists.Title -contains $DestinationLists.Title))
+    If(!($SourceLists.Title -contains $DestinationLists.Title))
     {
         #Create a document library
         $NewList  = New-PnPList -Title $SourceList.Title -Template GenericList
-        Write-host "Document List '$($SourceList.Title)' created successfully!" -f Green
-        $listItems = Get-PnPListItem -List $SourceList -Fields "Id","Title","Guid"
+        $listItems = Get-PnPListItem -List $SourceList
          foreach($item in $listItems) {
            $itemVal = @{
             'Title' = $item['Title']
            }
           Add-PnPListItem -List $NewList -Values $itemVal -ContentType "Item"
         }
+        Write-host "Document List '$($SourceList.Title)' created successfully!" -f Green
     }
     else
     {
