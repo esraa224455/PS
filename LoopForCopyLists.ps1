@@ -22,6 +22,13 @@ ForEach($SourceList in $SourceLists)
         #Create a document library
         $NewList  = New-PnPList -Title $SourceList.Title -Template GenericList
         Write-host "Document List '$($SourceList.Title)' created successfully!" -f Green
+        $listItems = Get-PnPListItem -List $SourceList -Fields "Id","Title","Guid"
+         foreach($item in $listItems) {
+           $itemVal = @{
+            'Title' = $item['Title']
+           }
+          Add-PnPListItem -List $NewList -Values $itemVal -ContentType "Item"
+        }
     }
     else
     {
